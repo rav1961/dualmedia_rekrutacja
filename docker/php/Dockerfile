@@ -21,3 +21,11 @@ RUN docker-php-ext-install \
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
 WORKDIR /var/www/app
+
+#COPY --chown=www-data:www-data . /var/www/app
+#
+#RUN chown -R www-data:www-data /var/www/app
+#
+#USER www-data
+#
+#CMD ["www-data", "apache2-foreground"]

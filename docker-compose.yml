@@ -12,9 +12,9 @@ services:
       MYSQL_USER: ${MYSQL_USER}
       MYSQL_PASSWORD: ${MYSQL_PASSWORD}
     ports:
-      - "3306:3306"
+      - '${MYSQL_PORT}:3306'
     volumes:
-      - db_data:/var/lib/mysql
+      - ./db_data:/var/lib/mysql
     networks:
       - dm_network
 
@@ -25,7 +25,7 @@ services:
     ports:
       - '${APP_PHPMYADMIN_PORT}:80'
     environment:
-      - PMA_HOST=db
+      - PMA_HOST=db_server
     depends_on:
       - db_server
     networks:
@@ -39,9 +39,9 @@ services:
     ports:
       - '${APP_PORT}:80'
     environment:
-      - 'DATABASE_URL=mysql://${MYSQL_USER}:${MYSQL_PASSWORD}@db_server:3306/${MYSQL_DATABASE}?serverVersion=11.2'
+      - 'DATABASE_URL=mysql://${MYSQL_USER}:${MYSQL_PASSWORD}@db_server:${MYSQL_PORT}/${MYSQL_DATABASE}?serverVersion=mariadb-11.2.2'
     volumes:
-      - ./app:/var/www/app
+      - ./app:/var/www/app:cached
       - ./docker/apache/sites-enabled:/etc/apache2/sites-enabled
       - ./docker/php/conf.d/php.ini:/usr/local/etc/php/conf.d/extra-php-config.ini
     depends_on:
